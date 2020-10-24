@@ -1,4 +1,4 @@
-# Problem Set 7: Simulating the Spread of Disease and Virus Population Dynamics
+# Problem Set 7: Simulating the Spread of Disease and Virus Population Dynamics 
 # Name:
 # Collaborators:
 # Time:
@@ -7,7 +7,7 @@ import numpy as np
 import random
 import matplotlib.pyplot as plt
 
-'''
+''' 
 Begin helper code
 '''
 
@@ -35,8 +35,8 @@ class SimpleVirus(object):
 
         """
         Initialize a SimpleVirus instance, saves all parameters as attributes
-        of the instance.
-        maxBirthProb: Maximum reproduction probability (a float between 0-1)
+        of the instance.        
+        maxBirthProb: Maximum reproduction probability (a float between 0-1)        
         clearProb: Maximum clearance probability (a float between 0-1).
         """
 
@@ -48,7 +48,7 @@ class SimpleVirus(object):
     def doesClear(self):
 
         """ Stochastically determines whether this virus particle is cleared from the
-        patient's body at a time step.
+        patient's body at a time step. 
         returns: True with probability self.clearProb and otherwise returns
         False.
         """
@@ -60,7 +60,7 @@ class SimpleVirus(object):
         else:
             return False
 
-
+    
     def reproduce(self, popDensity):
 
         """
@@ -68,18 +68,18 @@ class SimpleVirus(object):
         time step. Called by the update() method in the SimplePatient and
         Patient classes. The virus particle reproduces with probability
         self.maxBirthProb * (1 - popDensity).
-
+        
         If this virus particle reproduces, then reproduce() creates and returns
         the instance of the offspring SimpleVirus (which has the same
-        maxBirthProb and clearProb values as its parent).
+        maxBirthProb and clearProb values as its parent).         
 
         popDensity: the population density (a float), defined as the current
-        virus population divided by the maximum population.
-
+        virus population divided by the maximum population.         
+        
         returns: a new instance of the SimpleVirus class representing the
         offspring of this virus particle. The child should have the same
         maxBirthProb and clearProb values as this virus. Raises a
-        NoChildException if this virus particle does not reproduce.
+        NoChildException if this virus particle does not reproduce.               
         """
 
         # TODO
@@ -96,7 +96,7 @@ class SimplePatient(object):
     """
     Representation of a simplified patient. The patient does not take any drugs
     and his/her virus populations have no drug resistance.
-    """
+    """    
 
     def __init__(self, viruses, maxPop):
 
@@ -119,7 +119,7 @@ class SimplePatient(object):
     def getTotalPop(self):
 
         """
-        Gets the current total virus population.
+        Gets the current total virus population. 
         returns: The total virus population (an integer)
         """
 
@@ -132,13 +132,13 @@ class SimplePatient(object):
         """
         Update the state of the virus population in this patient for a single
         time step. update() should execute the following steps in this order:
-
+        
         - Determine whether each virus particle survives and updates the list
-        of virus particles accordingly.
+        of virus particles accordingly.   
         - The current population density is calculated. This population density
-          value is used until the next call to update()
+          value is used until the next call to update() 
         - Determine whether each virus particle should reproduce and add
-          offspring virus particles to the list of viruses in this patient.
+          offspring virus particles to the list of viruses in this patient.                    
 
         returns: The total virus population at the end of the update (an
         integer)
@@ -172,9 +172,9 @@ def simulationWithoutDrug():
 
     """
     Run the simulation and plot the graph for problem 2 (no drugs are used,
-    viruses do not have any drug resistance).
+    viruses do not have any drug resistance).    
     Instantiates a patient, runs a simulation for 300 timesteps, and plots the
-    total virus population as a function of time.
+    total virus population as a function of time.    
     """
 
     # TODO
@@ -201,5 +201,4 @@ def simulationWithoutDrug():
     plt.title('Graph of Population of Virus against Time')
     plt.show()
 
-simulationWithoutDrug()
-
+    
