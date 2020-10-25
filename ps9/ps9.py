@@ -27,13 +27,21 @@ def loadSubjects(filename):
     # The following sample code reads lines from the specified file and prints
     # each one.
     inputFile = open(filename)
+    dict = {}
     for line in inputFile:
-        print line
+        list = line.strip().split(',')
+        ##print list #-Working as intended
 
+        dict[list[0]] = (int(list[1]),int(list[2]))
+
+    return dict
+
+    ##print 'final dictionary value is %s' % (dict) #-Working as intended
     # TODO: Instead of printing each line, modify the above to parse the name,
     # value, and work of each subject and create a dictionary mapping the name
     # to the (value, work).
 
+##loadSubjects('shortened_subjects.txt') #-Working as intended
 def printSubjects(subjects):
     """
     Prints a string containing name, value, and work of each subject in
@@ -55,6 +63,7 @@ def printSubjects(subjects):
     res = res + 'Total Work:\t' + str(totalWork) + '\n'
     print res
 
+sub = loadSubjects('shortened_subjects.txt')
 #
 # Problem 2: Subject Selection By Greedy Optimization
 #
@@ -65,6 +74,7 @@ def cmpValue(subInfo1, subInfo2):
     value in (value, work) tuple in subInfo2
     """
     # TODO...
+    return subInfo1[VALUE] > subInfo2[VALUE]
 
 def cmpWork(subInfo1, subInfo2):
     """
@@ -72,13 +82,15 @@ def cmpWork(subInfo1, subInfo2):
     in (value, work) tuple in subInfo2
     """
     # TODO...
+    return subInfo1[WORK] < subInfo2[WORK]
 
 def cmpRatio(subInfo1, subInfo2):
     """
-    Returns True if value/work in (value, work) tuple subInfo1 is 
+    Returns True if value/work in (value, work) tuple subInfo1 is
     GREATER than value/work in (value, work) tuple in subInfo2
     """
     # TODO...
+    return (float(subInfo1[VALUE])/float(subInfo1[WORK])) > (float(subInfo2[VALUE])/float(subInfo2[WORK]))
 
 def greedyAdvisor(subjects, maxWork, comparator):
     """
@@ -93,10 +105,48 @@ def greedyAdvisor(subjects, maxWork, comparator):
     returns: dictionary mapping subject name to (value, work)
     """
     # TODO...
+    currentWork = 0
+    courses = {}
+    while currentWork < maxWork:
+        bestSubject = None
+        for subject in subjects:
+
+            if subjects[subject][WORK] > maxWork-currentWork:
+                ##print 'limit reached. work is %s while work remaining is %s' % (subjects[subject][WORK],maxWork-currentWork)
+                continue
+            elif bestSubject == None:
+                if subject not in courses:
+                    bestSubject = subject
+                continue
+            else:
+                ##print 'comparing %s and %s' % (subjects[bestSubject][WORK],subjects[subject][WORK])
+                test = comparator(subjects[bestSubject],subjects[subject])
+                ##print 'test results are %s' % (test)
+                if test == False and subject not in courses:
+                    bestSubject = subject
+                    ##print 'best subject is now %s' % (bestSubject)
+
+        if bestSubject == None:
+            ##print 'breaking'
+            break
+        else:
+            currentWork += subjects[bestSubject][WORK]
+            courses[bestSubject] = subjects[bestSubject]
+            ##print 'currentWork is %s while courses is %s' % (currentWork, courses)
+
+    return courses
 
 #
 # Problem 3: Subject Selection By Brute Force
 #
+def countValue(subjects):
+
+    value = 0
+    for sub in subjects:
+        value += subjects[sub][VALUE]
+
+    return value
+
 def bruteForceAdvisor(subjects, maxWork):
     """
     Returns a dictionary mapping subject name to (value, work), which
@@ -108,5 +158,36 @@ def bruteForceAdvisor(subjects, maxWork):
     returns: dictionary mapping subject name to (value, work)
     """
     # TODO...
+    if len(subjects) == 0 or maxWork <= 0:
+        ##print 'base case'
+        return {}
+    else:
+        bestCase = {}
 
+        for sub in subjects:
+            case = {}
+            if subjects[sub][WORK] > maxWork:
+                continue
+            else:
+                ## recursive case here
+                case[sub] = subjects[sub]
+                remainingSubjects = subjects.copy()
+                remainingSubjects.pop(sub)
+                remainingWork = maxWork - subjects[sub][WORK]
+
+                recursion = bruteForceAdvisor(remainingSubjects,remainingWork)
+                case.update(recursion)
+
+            ##print 'current case is %s with value of %s. \n current best case s %s with value of %s'
+            ##print 'got here'
+            if bestCase == {}:
+                bestCase = case
+            else:
+                if countValue(case) > countValue(bestCase):
+                    bestCase = case
+
+        ##print 'returning case of %s' % (bestCase)
+        return bestCase
+
+printSubjects(bruteForceAdvisor(sub,15))
 
